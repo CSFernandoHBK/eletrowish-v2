@@ -1,22 +1,34 @@
 import { Request, Response } from "express";
 import connectionDB from "../database/db.js"
 import {productSchema} from "../schemas/validateProduct.schema.js" 
-import { Product } from "../protocols/product.type";
+import { getAllProductsREP, verifyProduct } from "../repositories/products.repository/products.repository.js";
 
-async function getProduct(req: Request, res: Response){
-    const {id} = req.params;
-
+async function getAllProduct(req: Request, res: Response){
     try{
-        const lista = await connectionDB.query(`
-            SELECT * FROM products
-        `)
-        return res.send(lista.rows)
-
+        const lista = await getAllProductsREP();
+        return res.send(lista) 
     } catch(err){
         console.log(err)
         return res.status(500).send(err.message);
     }
 }
+
+async function getProduct(req: Request, res: Response){
+    const {id} = req.params;
+
+    try{
+        const product = await verifyProduct(Number(id))
+        if(!product){
+            return res.status(404).send("Product not found!")
+        }
+        return res.send(product)
+    } catch(err){
+        console.log(err)
+        return res.status(500).send(err.message);
+    }
+}
+
+
 
 async function addProduct(req: Request, res: Response){
     const {name, price, store, target_date} = req.body; 
@@ -102,6 +114,7 @@ async function updateProduct(req: Request, res: Response){
 }
 
 export{
+    getAllProduct,
     getProduct,
     removeProduct,
     addProduct,
