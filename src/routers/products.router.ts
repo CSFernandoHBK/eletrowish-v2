@@ -6,8 +6,8 @@ const productsRouter = Router();
 productsRouter
     .get("/products", getProduct)
     .post("/products", addProduct)
-    .delete("/products", removeProduct)
-    .put("/products", updateProduct)
+    .delete("/products/:id", removeProduct)
+    .put("/products/:id", updateProduct)
     .get("/health", (req, res) => res.send("Tudo ok!"));
 
 export default productsRouter;
