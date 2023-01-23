@@ -4,6 +4,8 @@ import {productSchema} from "../schemas/validateProduct.schema.js"
 import { Product } from "../protocols/product.type";
 
 async function getProduct(req: Request, res: Response){
+    const {id} = req.params;
+
     try{
         const lista = await connectionDB.query(`
             SELECT * FROM products
