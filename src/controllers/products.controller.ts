@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import connectionDB from "../database/db.js"
 import {productSchema} from "../schemas/validateProduct.schema.js" 
-import { addProductREP, getAllProductsREP } from "../repositories/products.repository/products.repository.js";
+import { addProductREP, getAllProductsREP, updateProductREP, verifyProduct } from "../repositories/products.repository/products.repository.js";
+import { ProductEntity } from "src/protocols/product.type.js";
 
 async function getAllProduct(req: Request, res: Response){
     try{
@@ -13,7 +14,7 @@ async function getAllProduct(req: Request, res: Response){
     }
 }
 
-/*async function getProduct(req: Request, res: Response){
+async function getProduct(req: Request, res: Response){
     const {id} = req.params;
 
     try{
@@ -26,7 +27,7 @@ async function getAllProduct(req: Request, res: Response){
         console.log(err)
         return res.status(500).send(err.message);
     }
-}*/
+}
 
 
 
@@ -72,7 +73,7 @@ async function removeProduct(req: Request, res: Response){
         return res.status(500).send(err.message);
     }
 }
-
+*/
 async function updateProduct(req: Request, res: Response){
     const {name, price, store, target_date} = req.body;
     const {id} = req.params;
@@ -88,17 +89,15 @@ async function updateProduct(req: Request, res: Response){
     }
 
     try{
-        const product = await connectionDB.query(`
+        /*const product = await connectionDB.query(`
         SELECT * FROM products WHERE id=$1
         `, [id])
 
         if(!product.rows[0]){
             return res.status(404).send("Product not found!")
-        }
+        }*/
 
-        await connectionDB.query(`
-        UPDATE products SET name=$1, price=$2, store=$3, target_date=$4 WHERE id=$5
-        `, [name, price, store, target_date, id])
+        await updateProductREP(req.body, Number(id))
 
         return res.status(200).send(`Product id ${id} updated!`)
 
@@ -108,12 +107,12 @@ async function updateProduct(req: Request, res: Response){
     }
 }
 
-*/
+
 
 export{
     getAllProduct,
-    /*getProduct,
-    removeProduct,*/
+    getProduct,
+    /*removeProduct,*/
     addProduct,
-    /*updateProduct*/
+    updateProduct
 }
