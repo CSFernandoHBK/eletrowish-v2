@@ -29,3 +29,11 @@ export async function updateProductREP(product: Product, id: number){
         })
     )
 }
+
+export async function deleteProductREP(id: number){
+    return prisma.products.delete({
+        where:{
+            id: id
+        }
+    })
+}

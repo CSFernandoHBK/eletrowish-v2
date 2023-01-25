@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import connectionDB from "../database/db.js"
 import {productSchema} from "../schemas/validateProduct.schema.js" 
-import { addProductREP, getAllProductsREP, updateProductREP, verifyProduct } from "../repositories/products.repository/products.repository.js";
+import { deleteProductREP, addProductREP, getAllProductsREP, updateProductREP, verifyProduct } from "../repositories/products.repository/products.repository.js";
 import { ProductEntity } from "src/protocols/product.type.js";
 
 async function getAllProduct(req: Request, res: Response){
@@ -46,7 +46,7 @@ async function addProduct(req: Request, res: Response){
         return res.status(500).send(err.message);
     }
 }
-/*
+
 async function removeProduct(req: Request, res: Response){
     const {id} = req.params;
 
@@ -55,27 +55,21 @@ async function removeProduct(req: Request, res: Response){
     }
 
     try{
-        const product = await connectionDB.query(`
-        SELECT * FROM products WHERE id=$1
-        `, [id])
-
-        if(!product.rows[0]){
+        const product = await verifyProduct(Number(id))
+        if(!product){
             return res.status(404).send("Product not found!")
         }
 
-        await connectionDB.query(`
-        DELETE FROM products WHERE id=$1
-        `, [id])
+        await deleteProductREP(Number(id))
         
-        return res.status(200).send(`Product ${product.rows[0].name} removed!`)
+        return res.status(200).send(`Product ${product.name} removed!`)
     } catch(err){
         console.log(err)
         return res.status(500).send(err.message);
     }
 }
-*/
+
 async function updateProduct(req: Request, res: Response){
-    const {name, price, store, target_date} = req.body;
     const {id} = req.params;
 
     if(!id){
@@ -89,13 +83,11 @@ async function updateProduct(req: Request, res: Response){
     }
 
     try{
-        /*const product = await connectionDB.query(`
-        SELECT * FROM products WHERE id=$1
-        `, [id])
+        const product = await verifyProduct(Number(id))
 
-        if(!product.rows[0]){
+        if(!product){
             return res.status(404).send("Product not found!")
-        }*/
+        }
 
         await updateProductREP(req.body, Number(id))
 
@@ -112,7 +104,7 @@ async function updateProduct(req: Request, res: Response){
 export{
     getAllProduct,
     getProduct,
-    /*removeProduct,*/
+    removeProduct,
     addProduct,
     updateProduct
 }
