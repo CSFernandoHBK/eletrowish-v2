@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import connectionDB from "../database/db.js"
 import {productSchema} from "../schemas/validateProduct.schema.js" 
-import { getAllProductsREP, verifyProduct } from "../repositories/products.repository/products.repository.js";
+import { addProductREP, getAllProductsREP } from "../repositories/products.repository/products.repository.js";
 
 async function getAllProduct(req: Request, res: Response){
     try{
@@ -13,7 +13,7 @@ async function getAllProduct(req: Request, res: Response){
     }
 }
 
-async function getProduct(req: Request, res: Response){
+/*async function getProduct(req: Request, res: Response){
     const {id} = req.params;
 
     try{
@@ -26,13 +26,11 @@ async function getProduct(req: Request, res: Response){
         console.log(err)
         return res.status(500).send(err.message);
     }
-}
+}*/
 
 
 
 async function addProduct(req: Request, res: Response){
-    const {name, price, store, target_date} = req.body; 
-
     const validation = productSchema.validate(req.body, {abortEarly: true})
 
     if (validation.error) {
@@ -40,17 +38,14 @@ async function addProduct(req: Request, res: Response){
     }
 
     try{
-        await connectionDB.query(`
-        INSERT INTO products (name, price, store, target_date) values ($1, $2, $3, $4)
-        `, [name, price, store, target_date])
-
-        return res.send(`added product ${name}`)
+        await addProductREP(req.body)
+        return res.status(201).send(`Added product: ${req.body.name}`)
     } catch(err){
         console.log(err)
         return res.status(500).send(err.message);
     }
 }
-
+/*
 async function removeProduct(req: Request, res: Response){
     const {id} = req.params;
 
@@ -113,10 +108,12 @@ async function updateProduct(req: Request, res: Response){
     }
 }
 
+*/
+
 export{
     getAllProduct,
-    getProduct,
-    removeProduct,
+    /*getProduct,
+    removeProduct,*/
     addProduct,
-    updateProduct
+    /*updateProduct*/
 }

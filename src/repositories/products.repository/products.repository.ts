@@ -1,21 +1,17 @@
-import connectionDB from "../../database/db.js";
+import prisma from "../../database/db.js"
 import { Product } from "../../protocols/product.type";
 
 export async function getAllProductsREP(){
-    const promise = await connectionDB.query(`
-        SELECT * FROM products
-        `)
-    const lista: Product[] = promise.rows
-    return (lista) 
+    return (prisma.products.findMany()) 
 }
 
-export async function verifyProduct(id: number): Promise<Product>{
-    const product = await connectionDB.query(`
-    SELECT * FROM products WHERE id=$1
-    `, [id])
-    return(product.rows[0])
-}
+/*export async function verifyProduct(id): {
+    const product = await prisma.products.findUnique()
+    return()
+}*/
 
-export async function addProductREP(){
-    
+export async function addProductREP(product: Product){
+    return prisma.products.create({
+        data: product
+    })
 }

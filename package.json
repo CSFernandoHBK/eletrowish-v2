@@ -20,10 +20,12 @@
   },
   "homepage": "https://github.com/CSFernandoHBK/POC-eletrowish#readme",
   "devDependencies": {
+    "@prisma/client": "^4.9.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.15",
     "@types/joi": "^17.2.3",
     "@types/pg": "^8.6.6",
+    "prisma": "^4.9.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
   },
