@@ -6,11 +6,15 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon src/server.ts"
+    "dev": "npx nodemon src/server.ts",
+    "prisma:seed": "npx prisma db seed"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CSFernandoHBK/POC-eletrowish.git"
+  },
+  "prisma":{
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
