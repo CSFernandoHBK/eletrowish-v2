@@ -2,6 +2,22 @@
 
 Eletrowish is an API that suports the creation of a "electronic wishlist", containing products that you wish to buy, including a goal date for you to buy them.
 
+## How to run:
+
+#### 1. Create an empty database
+#### 2. Configure the .env DATABASE_URL
+#### 3. Run the migration command
+```
+npx prisma migrate dev
+```
+#### 4. Run the seed command
+```
+npm run prisma:seed
+```
+#### 5. Enjoy :)
+
+#### 
+
 ## Routes
 
 ### **GET: /products**

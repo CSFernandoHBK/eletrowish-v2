@@ -8,9 +8,26 @@ datasource db {
 }
 
 model products {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  price       Int
-  store       String
-  target_date DateTime @db.Date
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  product String
+  price   Int
+  store   String
+  users   users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sessions {
+  id      Int    @id @default(autoincrement())
+  user_id Int    @unique
+  token   String
+  users   users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id       Int        @id @default(autoincrement())
+  username String     @unique @db.VarChar(32)
+  email    String     @db.VarChar(70)
+  password String     @db.VarChar(16)
+  products products[]
+  sessions sessions?
 }
